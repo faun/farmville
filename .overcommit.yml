@@ -1,0 +1,7 @@
+PreCommit:
+  AuthorName:
+    enabled: false
+    description: 'Check for author name'
+    requires_files: false
+    required: true
+    quiet: true
