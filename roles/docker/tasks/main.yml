@@ -1,0 +1,44 @@
+---
+- name: Install dependencies
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    install_recommends: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - apparmor
+
+- name: Add Docker repository key
+  apt_key:
+    id: "58118E89F3A912897C070ADBF76221572C52609D"
+    keyserver: "hkp://p80.pool.sks-keyservers.net:80"
+    state: present
+
+- name: "Add Docker repository and update apt cache for {{ ansible_distribution_release }}"
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
+    update_cache: yes
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install linux-image-extra package
+  apt:
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+    pkg: "linux-image-extra-{{ansible_kernel}}"
+
+- name: Install Docker
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+  with_items:
+    - docker-engine
+
+- name: Make sure docker is running
+  service:
+    name: docker
+    state: started
