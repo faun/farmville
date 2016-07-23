@@ -1,4 +1,8 @@
 ---
+- set_fact: longsleep=false
+- set_fact: longsleep=true
+  when: "'longsleep' in ansible_kernel"
+
 - name: Install dependencies
   apt:
     pkg: "{{ item }}"
@@ -28,15 +32,27 @@
     install_recommends: yes
     update_cache: yes
     pkg: "linux-image-extra-{{ansible_kernel}}"
+  when: not longsleep
 
-- name: Install Docker
+- name: Install docker-engine using apt
   apt:
     pkg: "{{ item }}"
     state: latest
     install_recommends: yes
     update_cache: yes
+  when: not longsleep
   with_items:
     - docker-engine
+
+- name: Install docker.io using apt
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+  when: longsleep
+  with_items:
+    - docker.io
 
 - name: Make sure docker is running
   service:
