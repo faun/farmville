@@ -1,6 +1,9 @@
 ---
-- name: Update apt cache and upgrade packages
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-    upgrade: dist
+- name: Include timezone tasks
+  include: tasks/timezone.yml
+
+- name: Include locale tasks
+  include: tasks/locale.yml
+
+- name: Include apt tasks
+  include: tasks/apt.yml

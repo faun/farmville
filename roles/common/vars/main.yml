@@ -1,0 +1,6 @@
+---
+locale: 'en_US.UTF-8'
+language: 'en_US:en'
+timezone: 'UTC'
+tz: 'UTC'
+debug_mode: "{{ lookup('env','DEBUG') | bool }}"

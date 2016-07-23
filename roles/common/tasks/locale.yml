@@ -1,0 +1,21 @@
+---
+- name: Debug current locale
+  tags: ['system', 'locale']
+  debug: 
+    var: ansible_env.LC_ALL
+
+- name: Debug current language
+  tags: ['system', 'locale']
+  debug:
+    var: ansible_env.LANGUAGE
+
+- name: Generate server locale
+  tags: ['system', 'locale']
+  command: "/usr/sbin/locale-gen {{ locale }}"
+  when: ansible_env.LC_ALL != locale
+
+- name: Set server locale
+  tags: ['system', 'locale']
+  command: "/usr/sbin/update-locale LANG={{ locale }} LC_ALL={{ locale }} LANGUAGE={{ language }}"
+  when: ansible_env.LC_ALL != locale or ansible_env.LANGUAGE != language
+
