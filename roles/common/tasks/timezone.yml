@@ -19,7 +19,7 @@
 - name: Set timezone
   tags: ['system', 'timezone']
   command: timedatectl set-timezone {{ timezone}}
-  when: ansible_date_time.tz != tz
+  when: ansible_date_time.tz != tz and ansible_service_mgr == 'systemd'
   
 - name: Link timezone file to /etc/localtime
   tags: ['system', 'timezone']
@@ -33,11 +33,14 @@
 
 - name: Set timezone value in /etc/timezone
   tags: ['system', 'timezone']
-  file:
-    content: "{{ timezone }}\n"
+  template:
+    src:  templates/timezone
     dest: /etc/timezone
-    state: link
+    owner: root
+    group: root
+    mode: 0644
     force: yes
+    backup: yes
   notify: Update TZdata
   register: file_link
   when: current_timezone.stdout != timezone
