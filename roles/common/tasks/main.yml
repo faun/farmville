@@ -7,3 +7,6 @@
 
 - name: Include apt tasks
   include: tasks/apt.yml
+
+- name: Include swap tasks
+  include: tasks/swap.yml

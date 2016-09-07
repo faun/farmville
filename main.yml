@@ -3,7 +3,18 @@
   become: yes
   become_user: root
   hosts: all
+  vars:
+    smb_username: default_user
+    smb_password: default_password
+    smb_hostname: default_hostname
+    mount_points:
+      -
+    mount_destination: mount
+  vars_files:
+    - vars/external_vars.yml
   roles:
     - common
     - docker
-
+    - smb_mount
+    - autofs
+    - datadog

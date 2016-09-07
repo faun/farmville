@@ -1,5 +1,6 @@
 ---
 - name: Update apt cache and upgrade packages
+  tags: ['system', 'apt']
   apt:
     update_cache: yes
     cache_valid_time: 3600
