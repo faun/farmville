@@ -5,11 +5,11 @@ up:
 provision:
 	ansible-playbook main.yml ${ARGS}
 
-pine:
-	ansible-playbook main.yml -i /etc/ansible/hosts ${ARGS}
+deploy:
+	ansible-playbook main.yml -i inventory --limit production ${ARGS}
 
 dry-run:
-	ansible-playbook main.yml --check -i /etc/ansible/hosts
+	ansible-playbook main.yml --check -i inventory --limit production ${ARGS}
 
 check-syntax:
 	ansible-playbook main.yml --syntax-check
