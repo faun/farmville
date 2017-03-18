@@ -10,3 +10,6 @@ dry-run:
 
 check-syntax:
 	ansible-playbook site.yml --syntax-check
+
+install:
+	brew install ansible
