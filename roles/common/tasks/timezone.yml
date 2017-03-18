@@ -7,7 +7,7 @@
 
 - name: Show current value of tz
   tags: ['system', 'timezone']
-  debug: 
+  debug:
     var: "{{ item }}"
   with_items:
     - ansible_date_time.tz
@@ -20,7 +20,7 @@
   tags: ['system', 'timezone']
   command: timedatectl set-timezone {{ timezone}}
   when: ansible_date_time.tz != tz and ansible_service_mgr == 'systemd'
-  
+
 - name: Link timezone file to /etc/localtime
   tags: ['system', 'timezone']
   file:
@@ -34,7 +34,7 @@
 - name: Set timezone value in /etc/timezone
   tags: ['system', 'timezone']
   template:
-    src:  templates/timezone
+    src: templates/timezone
     dest: /etc/timezone
     owner: root
     group: root
