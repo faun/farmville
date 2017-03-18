@@ -1,5 +1,5 @@
 ---
-- hosts: servers
+- hosts: all
   name: Install datadog agent
   roles:
     - {role: Datadog.datadog, become: yes}
