@@ -31,6 +31,17 @@
   notify: Update TZdata
   when: ansible_date_time.tz != tz
 
+
+- name: Debug timezone value
+  tags: ['system', 'timezone']
+  debug:
+    var: timezone
+
+- name: Debug current timezone
+  tags: ['system', 'timezone']
+  debug:
+    var: ansible_date_time.tz
+
 - name: Set timezone value in /etc/timezone
   tags: ['system', 'timezone']
   template:
@@ -43,4 +54,4 @@
     backup: yes
   notify: Update TZdata
   register: file_link
-  when: current_timezone.stdout != timezone
+  when: ansible_date_time.tz != timezone
