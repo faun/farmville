@@ -1,0 +1,17 @@
+---
+- name: Add automount destination to /etc/auto.master
+  tags: ['autofs', 'smb']
+  lineinfile:
+    dest: '/etc/auto.master'
+    state: present
+    create: yes
+    line: '/{{ mount_destination }} /etc/auto.smb'
+
+- name: Add mount points to /etc/auto.smb
+  tags: ['autofs', 'smb']
+  lineinfile:
+    dest: '/etc/auto.smb'
+    state: present
+    create: yes
+    line: 'mntpoint -fstype=cifs,rw,username={{ smb_username }},password={{ smb_password }} ://{{ smb_hostname }}/{{ item }}'
+  with_items: "{{ mount_points }}"

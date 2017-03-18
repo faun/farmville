@@ -1,0 +1,6 @@
+---
+- name: Enable swap
+  tags: ['system', 'swap', 'apt']
+  apt:
+    name: dphys-swapfile
+    state: present

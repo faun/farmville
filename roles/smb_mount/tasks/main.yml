@@ -1,0 +1,91 @@
+---
+- name: Debug facts
+  tags: ['smb', 'debug']
+  debug:
+    var: smb_username
+  when: debug_mode
+
+- name: Debug facts
+  tags: ['smb', 'debug']
+  debug:
+    var: smb_password
+  when: debug_mode
+
+- name: Debug facts
+  tags: ['smb', 'debug']
+  debug:
+    var: smb_hostname
+  when: debug_mode
+
+- name: Debug facts
+  tags: ['smb', 'debug']
+  debug:
+    var: mount_points
+  when: debug_mode
+
+- name: Create /etc/samba directory if it doesn't exist
+  tags: ['smb']
+  file:
+    path: /etc/samba
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Set samba sudo mount permissions in /etc/sudoers
+  tags: ['smb', 'users']
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%samba ALL=(ALL) NOPASSWD:/bin/mount,/bin/umount,/sbin/mount.cifs,/sbin/umount.cifs'
+    validate: '/usr/sbin/visudo -cf %s'
+
+- name: Create samba group
+  tags: ['smb', 'users']
+  group:
+    name: samba
+    state: present
+
+- name: Add ansible ssh user to samba group
+  tags: ['smb', 'users']
+  user:
+    name: "{{ ansible_ssh_user }}"
+    state: present
+    groups: samba
+    append: yes
+
+- name: Add mountpoints to /etc/fstab
+  tags: ['smb']
+  lineinfile:
+    line: "//{{ smb_hostname }}/{{ item }} /{{ mount_destination }}/{{ item }} cifs credentials=/etc/samba/user 0 0"
+    dest: '/etc/fstab'
+    state: present
+  with_items: "{{ mount_points }}"
+
+# - name: Make mount point directories
+#   tags: ['smb']
+#   file:
+#     path: "/{{ mount_destination }}/{{ item }}"
+#     state: directory
+#     owner: root
+#     group: root
+#     mode: 0755
+#   with_items: "{{ mount_points }}"
+
+- name: Add samba credentials
+  tags: ['smb']
+  template:
+    dest: "/etc/samba/user"
+    src: 'templates/smb_credentials.j2'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Mount all mount points
+  tags: ['autofs', 'smb']
+  mount:
+    name: "/{{mount_destination}}/{{ item }}"
+    src: 'LABEL={{ item }}'
+    fstype: smbfs
+    state: mounted
+  with_items: "{{ mount_points }}"
