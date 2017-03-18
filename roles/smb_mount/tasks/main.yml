@@ -54,24 +54,6 @@
     groups: samba
     append: yes
 
-- name: Add mountpoints to /etc/fstab
-  tags: ['smb']
-  lineinfile:
-    line: "//{{ smb_hostname }}/{{ item }} /{{ mount_destination }}/{{ item }} cifs credentials=/etc/samba/user 0 0"
-    dest: '/etc/fstab'
-    state: present
-  with_items: "{{ mount_points }}"
-
-# - name: Make mount point directories
-#   tags: ['smb']
-#   file:
-#     path: "/{{ mount_destination }}/{{ item }}"
-#     state: directory
-#     owner: root
-#     group: root
-#     mode: 0755
-#   with_items: "{{ mount_points }}"
-
 - name: Add samba credentials
   tags: ['smb']
   template:
