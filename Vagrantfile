@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "main.yml"
+    ansible.playbook = "site.yml"
     ansible.groups = {
       "docker" => ["docker-01", "docker-02", 'docker-03'],
       "haproxy" => ["haproxy-01"]
