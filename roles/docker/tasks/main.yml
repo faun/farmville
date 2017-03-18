@@ -21,10 +21,12 @@
 
 - name: "Add Docker repository and update apt cache for {{ ansible_distribution_release }}"
   apt_repository:
-    repo: "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
+    repo: "{{ item }}"
     update_cache: yes
     state: present
   when: ansible_distribution == 'Ubuntu'
+  with_items:
+    - "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
 
 - name: Install linux-image-extra package
   apt:
