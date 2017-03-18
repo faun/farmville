@@ -3,13 +3,10 @@ up:
 	vagrant up --provider=vmware_fusion ${ARGS}
 
 provision:
-	ansible-playbook main.yml ${ARGS}
-
-deploy:
-	ansible-playbook main.yml -i inventory --limit production ${ARGS}
+	ansible-playbook site.yml -i inventories/production/hosts ${ARGS}
 
 dry-run:
-	ansible-playbook main.yml --check -i inventory --limit production ${ARGS}
+	ansible-playbook site.yml --check -i inventories/production/hosts ${ARGS}
 
 check-syntax:
-	ansible-playbook main.yml --syntax-check
+	ansible-playbook site.yml --syntax-check
