@@ -13,3 +13,7 @@ check-syntax:
 
 install:
 	brew install ansible
+	ansible-galaxy install dev-sec.os-hardening
+	ansible-galaxy install dev-sec.ssh-hardening
+	ansible-galaxy install dev-sec.nginx-hardening
+	ansible-galaxy install dev-sec.nginx-hardening
