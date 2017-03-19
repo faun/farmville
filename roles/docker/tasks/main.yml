@@ -36,6 +36,15 @@
     pkg: "linux-image-extra-{{ansible_kernel}}"
   when: not longsleep
 
+- name: Remove Legacy Docker Packages
+  apt:
+    pkg: "{{ item }}"
+    state: absent
+    install_recommends: yes
+    update_cache: yes
+  with_items:
+    - docker-machine
+
 - name: Install docker-engine using apt
   apt:
     pkg: "{{ item }}"
@@ -44,7 +53,7 @@
     update_cache: yes
   when: not longsleep
   with_items:
-    - docker-engine
+    - docker.io
 
 - name: Install docker.io using apt
   apt:
