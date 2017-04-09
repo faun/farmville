@@ -10,3 +10,6 @@
 
 - name: Include swap tasks
   include: tasks/swap.yml
+
+- name: Include datadog tasks
+  include: tasks/datadog.yml

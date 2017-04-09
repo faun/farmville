@@ -1,23 +1,47 @@
 ---
-- hosts: all
-  name: Install datadog agent
-  roles:
-    - {role: Datadog.datadog, become: yes}
-  vars:
-    datadog_api_key: "{{ datadog_api_key }}"
-    datadog_checks:
-      process:
-        init_config:
-        instances:
-          - name: ssh
-            search_string: ['ssh', 'sshd']
-          - name: syslog
-            search_string: ['rsyslog']
-            cpu_check_interval: 0.2
-            exact_match: true
-            ignore_denied_access: true
-  tasks:
-    - name: Ensure datadog is running
-      service:
-        name: datadog-agent
-        state: running
+- name: Install datadog agent dependencies
+  tags: ['system', 'packages', 'monitoring', 'datadog']
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+    install_recommends: yes
+  with_items:
+    - sysstat
+
+- name: Copy agent script into place
+  tags: ['system', 'monitoring', 'datadog']
+  copy:
+    src: ./files/datadog-agent/setup_agent.sh
+    dest: /tmp/datadog_agent_setup.sh
+    owner: ubuntu
+    group: root
+    mode: 0755
+
+- name: Create datadog agent home if it doesn't exist
+  tags: ['system', 'monitoring', 'datadog']
+  file:
+    path: /usr/local/datadog
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Install datadog agent
+  tags: ['system', 'monitoring', 'datadog']
+  shell: '/tmp/datadog_agent_setup.sh'
+  environment:
+    DD_API_KEY: "{{ datadog_api_key }}"
+    DD_HOME: '/usr/local/datadog'
+  register: ansible_agent_install_output
+  notify:
+    - start datadog
+
+- name: Debug stdout
+  debug:
+    msg: "{{ ansible_agent_install_output.stdout }}"
+
+- name: Debug stderr
+  debug:
+    msg: "{{ ansible_agent_install_output.stderr }}"
