@@ -1,0 +1,12 @@
+---
+- name: start datadog-agent
+  tags: ['services', 'monitoring', 'datadog']
+  service:
+    name: datadog-agent
+    state: started
+
+- name: restart datadog-agent
+  tags: ['services', 'monitoring', 'datadog']
+  service:
+    name: datadog-agent
+    state: restarted

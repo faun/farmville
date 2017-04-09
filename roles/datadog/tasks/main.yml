@@ -1,0 +1,97 @@
+---
+- name: Show current value of datadog_enabled
+  tags: ['system', 'packages', 'monitoring', 'datadog']
+  debug:
+    var: "{{ item }}"
+  with_items:
+    - datadog_enabled
+    - datadog_installed
+  when: debug_mode
+
+- name: Install datadog agent dependencies
+  tags: ['system', 'packages', 'monitoring', 'datadog']
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+    install_recommends: yes
+  with_items:
+    - sysstat
+
+- name: Copy agent script into place
+  tags: ['system', 'monitoring', 'datadog']
+  copy:
+    src: ./files/datadog-agent/setup_agent.sh
+    dest: /tmp/datadog_agent_setup.sh
+    owner: ubuntu
+    group: root
+    mode: 0755
+
+- name: Create datadog agent home if it doesn't exist
+  tags: ['system', 'permissions', 'monitoring', 'datadog']
+  file:
+    path: /usr/local/datadog
+    state: directory
+    mode: 0755
+    owner: ubuntu
+    group: root
+
+- name: Make install path is writable by ubuntu user
+  tags: ['system', 'permissions', 'monitoring', 'datadog']
+  file:
+    path: '{{ item }}'
+    owner: ubuntu
+    group: root
+    mode: 'u=rwx'
+    state: directory
+  with_items:
+    - /usr/local/datadog/
+
+# - name: Make log files writable by ubuntu user
+#   tags: ['system', 'permissions', 'monitoring', 'datadog']
+#   file:
+#     path: '{{ item }}'
+#     owner: ubuntu
+#     group: root
+#     mode: 0644
+#     state: touch
+#   with_items:
+#     - /usr/local/datadog/logs/supervisord.log
+#     - /usr/local/datadog/ddagent-install.log
+#
+- name: Install datadog agent
+  tags: ['system', 'monitoring', 'datadog']
+  shell: '/tmp/datadog_agent_setup.sh'
+  environment:
+    AGENT_VERSION: '5.12.3'
+    DD_API_KEY: "{{ datadog_api_key }}"
+    DD_HOME: '/usr/local/datadog'
+    DD_START_AGENT: 0
+    DD_DOG: 0
+  register: ansible_agent_install_output
+
+- name: Copy Upstart script
+  tags: ['system', 'services', 'monitoring', 'datadog']
+  file:
+    src: '/usr/local/datadog/bin/agent'
+    dest: '/etc/init.d/datadog-agent'
+    state: link
+  notify:
+    - start datadog-agent
+  when: datadog_enabled
+
+# - name: Ensure service is running
+#   tags: ['system', 'services', 'monitoring', 'datadog']
+#   service:
+#     name: datadog-agent
+#     state: started
+#     enabled: yes
+
+- name: Debug stdout
+  debug:
+    msg: "{{ ansible_agent_install_output.stdout }}"
+
+- name: Debug stderr
+  debug:
+    msg: "{{ ansible_agent_install_output.stderr }}"

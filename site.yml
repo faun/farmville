@@ -7,6 +7,7 @@
     - "{{ protected_storage }}/secret_vars.yml"
   roles:
     - common
+    - datadog
     - docker
     - smb_mount
     - autofs
