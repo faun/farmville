@@ -10,7 +10,6 @@
     - docker
     - smb_mount
     - autofs
-    - datadog
     - dev-sec.os-hardening
     - dev-sec.ssh-hardening
     - dev-sec.nginx-hardening

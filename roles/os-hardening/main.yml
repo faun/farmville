@@ -1,0 +1,10 @@
+---
+- name: OS Hardening
+  vars:
+    sysctl_config:
+      # Allow IPv4 traffic forwarding.
+      net.ipv4.ip_forward: 1
+      # Set the default forward policy of ufw
+      ufw_default_forward_policy: ACCEPT
+  roles:
+    - dev-sec.os-hardening
