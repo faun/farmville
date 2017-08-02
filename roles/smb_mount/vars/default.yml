@@ -1,9 +1,0 @@
----
-mount_points:
-  - Foo
-  - Bar
-  - Baz
-smb_hostname: 'server.example.com'
-smb_username: 'username'
-smb_password: 'password'
-mount_destination: 'mount'
