@@ -12,10 +12,9 @@
 - name: Generate server locale
   tags: ['system', 'locale']
   command: "/usr/sbin/locale-gen {{ locale }}"
-  when: ansible_env.LC_ALL != locale
+  when: ansible_env.LC_ALL is undefined
 
 - name: Set server locale
   tags: ['system', 'locale']
   command: "/usr/sbin/update-locale LANG={{ locale }} LC_ALL={{ locale }} LANGUAGE={{ language }}"
   when: ansible_env.LC_ALL is undefined or ansible_env.LANGUAGE is undefined
-
