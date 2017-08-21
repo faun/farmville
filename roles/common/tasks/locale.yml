@@ -1,7 +1,7 @@
 ---
 - name: Debug current locale
   tags: ['system', 'locale']
-  debug: 
+  debug:
     var: ansible_env.LC_ALL
 
 - name: Debug current language
