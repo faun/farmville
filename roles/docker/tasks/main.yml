@@ -44,6 +44,7 @@
     update_cache: yes
   with_items:
     - docker-machine
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install docker-engine using apt
   apt:
@@ -54,6 +55,7 @@
   when: not longsleep
   with_items:
     - docker.io
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install docker.io using apt
   apt:
@@ -64,6 +66,7 @@
   when: longsleep
   with_items:
     - docker.io
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Make sure docker is running
   service:
