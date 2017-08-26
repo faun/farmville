@@ -3,6 +3,10 @@
 - set_fact: longsleep=true
   when: "'longsleep' in ansible_kernel"
 
+- set_fact: hypriot=false
+- set_fact: hypriot=true
+  when: "'hypriot' in ansible_kernel"
+
 - name: Install dependencies
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
