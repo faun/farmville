@@ -23,6 +23,14 @@
     var: mount_points
   when: debug_mode
 
+- name: Install cifs utils apt package
+  tags: ['packages', 'smb']
+  apt:
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+    pkg: cifs-utils
+
 - name: Create /etc/samba directory if it doesn't exist
   tags: ['smb']
   file:
@@ -43,7 +51,7 @@
 - name: Create samba group
   tags: ['smb', 'users']
   group:
-    name: samba
+    name: sambashare
     state: present
 
 - name: Add ansible ssh user to samba group
@@ -51,7 +59,7 @@
   user:
     name: "{{ ansible_ssh_user }}"
     state: present
-    groups: samba
+    groups: sambashare
     append: yes
 
 - name: Add samba credentials
