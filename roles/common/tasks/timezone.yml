@@ -14,7 +14,7 @@
     - tz
     - current_timezone.stdout
     - timezone
-  when: debug_mode
+  when: ansible_check_mode
 
 - name: set timezone to America/Pacific
   tags: ['system', 'timezone']

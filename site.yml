@@ -5,8 +5,6 @@
   hosts: all
   vars_files:
     - "{{ protected_storage }}/secret_vars.yml"
-  vars:
-    debug_mode: "{{ lookup('env','DEBUG') | bool }}"
   roles:
     - common
     - docker

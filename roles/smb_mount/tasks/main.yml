@@ -3,25 +3,25 @@
   tags: ['smb', 'debug']
   debug:
     var: smb_username
-  when: debug_mode
+  when: ansible_check_mode
 
 - name: Debug facts
   tags: ['smb', 'debug']
   debug:
     var: smb_password
-  when: debug_mode
+  when: ansible_check_mode
 
 - name: Debug facts
   tags: ['smb', 'debug']
   debug:
     var: smb_hostname
-  when: debug_mode
+  when: ansible_check_mode
 
 - name: Debug facts
   tags: ['smb', 'debug']
   debug:
     var: mount_points
-  when: debug_mode
+  when: ansible_check_mode
 
 - name: Install cifs utils apt package
   tags: ['packages', 'smb']
