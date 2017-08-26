@@ -10,3 +10,7 @@
 
 - name: Include swap tasks
   include: tasks/swap.yml
+
+- name: Echo debug_mode value
+  debug:
+    msg: "Debug mode is {{ debug_mode }}"
