@@ -16,21 +16,10 @@
     - timezone
   when: debug_mode
 
-- name: Set timezone
+- name: set timezone to America/Pacific
   tags: ['system', 'timezone']
-  command: timedatectl set-timezone {{ timezone}}
-  when: ansible_date_time.tz != tz and ansible_service_mgr == 'systemd'
-
-- name: Link timezone file to /etc/localtime
-  tags: ['system', 'timezone']
-  file:
-    src: "/usr/share/zoneinfo/{{ timezone }}"
-    dest: /etc/localtime
-    state: link
-    force: yes
-  notify: Update TZdata
-  when: ansible_date_time.tz != tz
-
+  timezone:
+    name: "America/Los_Angeles"
 
 - name: Debug timezone value
   tags: ['system', 'timezone']
