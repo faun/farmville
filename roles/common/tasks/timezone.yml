@@ -41,17 +41,3 @@
   tags: ['system', 'timezone']
   debug:
     var: ansible_date_time.tz
-
-- name: Set timezone value in /etc/timezone
-  tags: ['system', 'timezone']
-  template:
-    src: templates/timezone
-    dest: /etc/timezone
-    owner: root
-    group: root
-    mode: 0644
-    force: yes
-    backup: yes
-  notify: Update TZdata
-  register: file_link
-  when: ansible_date_time.tz != timezone

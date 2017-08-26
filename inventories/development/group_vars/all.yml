@@ -1,10 +1,2 @@
 ---
-mount_points:
-  - Foo
-  - Bar
-  - Baz
-smb_hostname: 'server.example.com'
-smb_username: 'username'
-smb_password: 'password'
-mount_destination: 'mount'
-datadog_api_key: 'your-key-here'
+protected_storage: .
