@@ -4,6 +4,7 @@
   when: "'longsleep' in ansible_kernel"
 
 - name: Install dependencies
+  tags: ['system', 'packages', 'apt', 'docker']
   apt:
     pkg: "{{ item }}"
     state: latest
@@ -14,12 +15,14 @@
     - apparmor
 
 - name: Add Docker repository key
+  tags: ['system', 'packages', 'apt', 'docker']
   apt_key:
     id: "58118E89F3A912897C070ADBF76221572C52609D"
     keyserver: "hkp://p80.pool.sks-keyservers.net:80"
     state: present
 
 - name: "Add Docker repository and update apt cache for {{ ansible_distribution_release }}"
+  tags: ['system', 'packages', 'apt', 'docker']
   apt_repository:
     repo: "{{ item }}"
     update_cache: yes
@@ -28,36 +31,8 @@
   with_items:
     - "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
 
-- name: Install linux-image-extra package
-  apt:
-    state: latest
-    install_recommends: yes
-    update_cache: yes
-    pkg: "linux-image-extra-{{ansible_kernel}}"
-  when: not longsleep
-
-- name: Remove Legacy Docker Packages
-  apt:
-    pkg: "{{ item }}"
-    state: absent
-    install_recommends: yes
-    update_cache: yes
-  with_items:
-    - docker-machine
-  ignore_errors: "{{ ansible_check_mode }}"
-
-- name: Install docker-engine using apt
-  apt:
-    pkg: "{{ item }}"
-    state: latest
-    install_recommends: yes
-    update_cache: yes
-  when: not longsleep
-  with_items:
-    - docker.io
-  ignore_errors: "{{ ansible_check_mode }}"
-
 - name: Install docker.io using apt
+  tags: ['system', 'packages', 'apt', 'docker']
   apt:
     pkg: "{{ item }}"
     state: latest
@@ -66,9 +41,24 @@
   when: longsleep
   with_items:
     - docker.io
+  check_mode: no
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install docker.io using apt
+  tags: ['system', 'packages', 'apt', 'docker']
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+  when: longsleep
+  with_items:
+    - docker.io
+  check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Make sure docker is running
+  tags: ['system', 'docker', 'services']
   service:
     name: docker
     state: started
