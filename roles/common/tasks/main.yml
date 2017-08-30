@@ -10,3 +10,6 @@
 
 - name: Include swap tasks
   include: tasks/swap.yml
+
+- name: Include firewall tasks
+  include: tasks/firewall.yml
