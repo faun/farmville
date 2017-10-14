@@ -12,8 +12,9 @@ check-syntax:
 	ansible-playbook site.yml --syntax-check
 
 install:
-	brew install ansible
+	brew install ansible || brew upgrade ansible
 	ansible-galaxy install dev-sec.os-hardening
 	ansible-galaxy install dev-sec.ssh-hardening
 	ansible-galaxy install jdauphant.nginx
 	ansible-galaxy install dev-sec.nginx-hardening
+	./scripts/configure_secrets
