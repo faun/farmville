@@ -1,0 +1,10 @@
+[pine64]
+hyperion ansible_host=hyperion.faun.me ansible_port=22 ansible_user=ubuntu
+
+[hyperiot]
+cluster-01 ansible_host=cluster-01.local ansible_port=22 ansible_user=pirate
+cluster-02 ansible_host=cluster-02.local ansible_port=22 ansible_user=pirate
+cluster-03 ansible_host=cluster-03.local ansible_port=22 ansible_user=pirate
+
+[webservers:children]
+pine64
