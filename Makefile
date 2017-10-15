@@ -16,9 +16,9 @@ check-syntax:
 
 install:
 	brew install ansible || brew upgrade ansible
-	ansible-galaxy install tersmitten.locales
-	ansible-galaxy install dev-sec.os-hardening
-	ansible-galaxy install dev-sec.ssh-hardening
-	ansible-galaxy install jdauphant.nginx
-	ansible-galaxy install dev-sec.nginx-hardening
+	ansible-galaxy install ${ARGS} dev-sec.nginx-hardening
+	ansible-galaxy install ${ARGS} dev-sec.os-hardening
+	ansible-galaxy install ${ARGS} dev-sec.ssh-hardening
+	ansible-galaxy install ${ARGS} jdauphant.nginx
+	ansible-galaxy install ${ARGS} tersmitten.locales
 	./scripts/configure_secrets
