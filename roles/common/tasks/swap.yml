@@ -1,6 +1,13 @@
 ---
-- name: Enable swap
-  tags: ['system', 'swap', 'apt']
+- name: Remove dphys-swapfile package
+  tags: ['system', 'swap']
   apt:
     name: dphys-swapfile
+    state: absent
+
+- name: Disable swap
+  tags: ['system', 'swap']
+  sysctl:
+    name: vm.swappiness
+    value: 0
     state: present
