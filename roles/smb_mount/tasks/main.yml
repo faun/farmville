@@ -74,7 +74,7 @@
 - name: Mount all mount points
   tags: ['autofs', 'smb']
   mount:
-    name: "/{{ mount_destination }}/{{ item }}"
+    path: "/{{ mount_destination }}/{{ item }}"
     src: "//{{ smb_hostname }}/{{ item }}"
     fstype: 'cifs'
     opts: "credential=/etc/samba/user"
