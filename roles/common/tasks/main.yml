@@ -1,9 +1,9 @@
 ---
 - name: Include timezone tasks
-  include: tasks/timezone.yml
+  include_tasks: tasks/timezone.yml
 
 - name: Include apt tasks
-  include: tasks/apt.yml
+  include_tasks: tasks/apt.yml
 
 - name: Include swap tasks
-  include: tasks/swap.yml
+  include_tasks: tasks/swap.yml
