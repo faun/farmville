@@ -2,9 +2,6 @@
 - name: Include timezone tasks
   include: tasks/timezone.yml
 
-- name: Include locale tasks
-  include: tasks/locale.yml
-
 - name: Include apt tasks
   include: tasks/apt.yml
 

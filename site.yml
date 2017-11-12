@@ -11,5 +11,6 @@
     - smb_mount
     - autofs
     - os-hardening
+    - tersmitten.locales
     - dev-sec.os-hardening
     - dev-sec.ssh-hardening
