@@ -7,16 +7,32 @@
 - set_fact: hypriot=true
   when: "'hypriot' in ansible_kernel"
 
-- name: Install dependencies
+- name: Ensure LSB package installed
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
-    pkg: "{{ item }}"
-    state: latest
-    install_recommends: yes
-  with_items:
-    - apt-transport-https
-    - ca-certificates
-    - apparmor
+    pkg: "lsb-release"
+    state: present
+    install_recommends: no
+
+- name: Set ansible LSB variable
+  tags: ['system', 'packages', 'apt', 'docker']
+  set_fact:
+    lsb_release_name: "{{ ansible_lsb.id | lower }}"
+
+- name: Set docker apt repository url
+  tags: ['system', 'packages', 'apt', 'docker']
+  set_fact:
+    docker_apt_url: "https://download.docker.com/linux/{{ lsb_release_name }}"
+
+- name: Set docker repository release ditribution channel
+  tags: ['system', 'packages', 'apt', 'docker']
+  set_fact:
+    docker_apt_dist: "stable"
+
+- name: Set docker repository source
+  tags: ['system', 'packages', 'apt', 'docker']
+  set_fact:
+    docker_apt_source: "deb {{ docker_apt_url }} {{ ansible_distribution_release }} {{ docker_apt_dist }}"
 
 - name: Add Docker repository key
   tags: ['system', 'packages', 'apt', 'docker']
@@ -25,39 +41,62 @@
     keyserver: "hkp://p80.pool.sks-keyservers.net:80"
     state: present
 
-- name: "Add Docker repository and update apt cache for {{ ansible_distribution_release }}"
+- name: Add docker-ce repository signing key
+  tags: ['system', 'packages', 'apt', 'docker']
+  apt_key:
+    id: 0EBFCD88
+    url: "https://download.docker.com/linux/{{ lsb_release_name }}/gpg"
+    state: present
+
+- name: "Add Docker repository for {{ lsb_release_name }}"
   tags: ['system', 'packages', 'apt', 'docker']
   apt_repository:
     repo: "{{ item }}"
     update_cache: yes
     state: present
-  when: ansible_distribution == 'Ubuntu'
   with_items:
-    - "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
+    - "{{ docker_apt_source }}"
 
-- name: Install docker.io using apt
+- name: Remove Legacy Docker Packages
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
     pkg: "{{ item }}"
-    state: latest
+    state: absent
+  with_items:
+    - docker
+    - docker-engine
+    - docker.io
+    - docker-hypriot
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install docker dependencies
+  tags: ['system', 'packages', 'apt', 'docker']
+  apt:
+    pkg: "{{ item }}"
+    state: present
     install_recommends: yes
     update_cache: yes
-  when: longsleep
   with_items:
-    - docker.io
+    - apparmor
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - docker-compose
+    - gnupg2
+    - software-properties-common
   check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Install docker.io using apt
+- name: Install Docker
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
     pkg: "{{ item }}"
-    state: latest
+    state: present
     install_recommends: yes
     update_cache: yes
-  when: longsleep
   with_items:
-    - docker.io
+    - docker-ce
+    - docker-compose
   check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"
 
