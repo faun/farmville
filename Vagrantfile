@@ -14,6 +14,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision 'ansible' do |ansible|
+    ansible.compatibiliy_mode = '2.0'
     ansible.playbook = 'site.yml'
     ansible.groups = {
       'webservers' => ['docker-01', 'docker-02', 'docker-03'],
