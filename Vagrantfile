@@ -4,7 +4,7 @@ require 'yaml'
 servers = YAML.load_file(File.join(File.dirname(__FILE__), 'servers.yml'))
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = 'hashicorp/precise64'
 
   servers.each do |server|
     config.vm.define server['name'] do |machine|
@@ -13,11 +13,11 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "site.yml"
+  config.vm.provision 'ansible' do |ansible|
+    ansible.playbook = 'site.yml'
     ansible.groups = {
-      "webservers" => ["docker-01", "docker-02", 'docker-03'],
-      "webservers:vars" => { "protected_storage" => "." }
+      'webservers' => ['docker-01', 'docker-02', 'docker-03'],
+      'webservers:vars' => { 'protected_storage' => '.' }
     }
   end
 end
