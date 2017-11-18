@@ -1,23 +1,22 @@
 ---
-- set_fact: longsleep=false
-- set_fact: longsleep=true
-  when: "'longsleep' in ansible_kernel"
-
-- set_fact: hypriot=false
-- set_fact: hypriot=true
-  when: "'hypriot' in ansible_kernel"
-
-- name: Ensure LSB package installed
-  tags: ['system', 'packages', 'apt', 'docker']
-  apt:
-    pkg: "lsb-release"
-    state: present
-    install_recommends: no
-
-- name: Set ansible LSB variable
-  tags: ['system', 'packages', 'apt', 'docker']
+- name: Set docker apt repository url
+  tags: ['system', 'packages', 'apt', 'docker', 'python']
   set_fact:
-    lsb_release_name: "{{ ansible_lsb.id | lower }}"
+    python_apt_url: "http://ppa.launchpad.net/fkrull/deadsnakes-python2.7/{{ lsb_release_name }}"
+
+- name: Add Python PPA repository
+  tags: ['system', 'packages', 'apt', 'docker', 'python']
+  apt_repository:
+    repo: "deb  {{ python_apt_url }} {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: yes
+
+- name: Ensure latest python2.7 is installed
+  tags: ['system', 'packages', 'apt', 'docker', 'python']
+  apt:
+    pkg: python2.7
+    state: latest
+    install_recommends: no
 
 - name: Set docker apt repository url
   tags: ['system', 'packages', 'apt', 'docker']

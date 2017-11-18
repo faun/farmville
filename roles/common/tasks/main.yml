@@ -1,4 +1,24 @@
 ---
+- set_fact: longsleep=false
+- set_fact: longsleep=true
+  when: "'longsleep' in ansible_kernel"
+
+- set_fact: hypriot=false
+- set_fact: hypriot=true
+  when: "'hypriot' in ansible_kernel"
+
+- name: Ensure LSB package installed
+  tags: ['system', 'packages', 'apt', 'docker', 'python']
+  apt:
+    pkg: "lsb-release"
+    state: present
+    install_recommends: no
+
+- name: Set ansible LSB variable
+  tags: ['system', 'packages', 'apt', 'docker']
+  set_fact:
+    lsb_release_name: "{{ ansible_lsb.id | lower }}"
+
 - name: Include timezone tasks
   include_tasks: tasks/timezone.yml
 
