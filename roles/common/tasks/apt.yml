@@ -2,7 +2,13 @@
 - name: Update apt cache and upgrade packages
   tags: ['system', 'apt']
   apt:
-    update_cache: yes
+    update_cache: 'yes'
     cache_valid_time: 3600
     upgrade: dist
   ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install vim
+  tags: ['system', 'apt']
+  apt:
+    name: vim
+    state: present
