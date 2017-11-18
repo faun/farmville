@@ -1,6 +1,6 @@
 ARGS:=
 vagrant-up:
-	vagrant up --provider=vmware_fusion ${ARGS}
+	vagrant up ${ARGS}
 
 vagrant-check:
 	ansible-playbook site.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --check
