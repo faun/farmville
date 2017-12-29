@@ -1,9 +1,15 @@
 ARGS:=
 vagrant-up:
-	vagrant up ${ARGS}
+	vagrant up --provider=virtualbox ${ARGS}
 
 vagrant-check:
 	ansible-playbook site.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --check
+
+vagrant:
+	ansible-playbook site.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
+
+vagrant-ping:
+	ansible -m ping -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory all
 
 provision:
 	ansible-playbook site.yml -i inventories/production/hosts ${ARGS}
