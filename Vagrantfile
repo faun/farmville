@@ -15,9 +15,12 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision 'ansible' do |ansible|
     ansible.playbook = 'site.yml'
+    ansible.host_key_checking = 'false'
     ansible.groups = {
       'webservers' => ['docker-01', 'docker-02', 'docker-03'],
-      'webservers:vars' => { 'protected_storage' => '.' }
+      'webservers:vars' => {
+        'protected_storage' => './protected/storage/development/'
+      }
     }
   end
 end
