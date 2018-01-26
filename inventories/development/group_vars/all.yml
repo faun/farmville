@@ -1,2 +1,2 @@
 ---
-protected_storage: .
+protected_storage: ./protected/storage/development/
