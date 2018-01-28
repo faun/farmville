@@ -1,13 +1,13 @@
 ---
-- name: 'haproxy-01'
+- name: 'master-01'
   private_ip: 10.250.100.101
-  role: 'haproxy'
-- name: 'docker-01'
+  role: 'master'
+- name: 'node-01'
   private_ip: 10.250.100.121
-  role: 'docker'
+  role: 'node'
 - name: 'docker-02'
   private_ip: 10.250.100.122
-  role: 'docker'
-- name: 'docker-03'
+  role: 'node'
+- name: 'node-03'
   private_ip: 10.250.100.123
-  role: 'docker'
+  role: 'node'
