@@ -14,3 +14,9 @@
     - tersmitten.locales
     - dev-sec.os-hardening
     - dev-sec.ssh-hardening
+  vars:
+    sysctl_overwrite:
+      # Disable IPv4 traffic forwarding.
+      net.ipv4.ip_forward: 1
+      # Set the default forward policy of ufw
+      ufw_default_forward_policy: ACCEPT
