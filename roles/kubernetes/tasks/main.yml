@@ -39,3 +39,19 @@
     update_cache: yes
   with_items:
     - kubeadm
+
+- name: Specify cri-tools release version
+  tags: ['system', 'packages', 'kubernetes']
+  set_fact:
+    crictl_release_version: "v1.0.0-alpha.0"
+
+- name: Copy crictl binary
+  tags: ['system', 'packages', 'kubernetes']
+  get_url:
+    url: "{{ item }}"
+    dest: /usr/local/bin/crictl
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "https://storage.googleapis.com/kubernetes-release/crictl/crictl-{{ crictl_release_version }}-linux-amd64"
