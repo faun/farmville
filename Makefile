@@ -21,10 +21,6 @@ check-syntax:
 	ansible-playbook site.yml --syntax-check
 
 install:
-	brew install ansible || brew upgrade ansible
-	ansible-galaxy install ${ARGS} dev-sec.nginx-hardening
-	ansible-galaxy install ${ARGS} dev-sec.os-hardening
-	ansible-galaxy install ${ARGS} dev-sec.ssh-hardening
-	ansible-galaxy install ${ARGS} jdauphant.nginx
-	ansible-galaxy install ${ARGS} tersmitten.locales
+	pip install ansible
+	ansible-galaxy install -r requirements.yml
 	./scripts/configure_secrets
