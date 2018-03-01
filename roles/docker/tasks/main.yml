@@ -1,15 +1,4 @@
 ---
-# - name: Set docker apt repository url
-#   tags: ['system', 'packages', 'apt', 'docker', 'python']
-#   set_fact:
-#     python_apt_url: "http://ppa.launchpad.net/fkrull/deadsnakes-python2.7/{{ lsb_release_name }}"
-
-# - name: Add Python PPA repository
-#   tags: ['system', 'packages', 'apt', 'docker', 'python']
-#   apt_repository:
-#     repo: "deb  {{ python_apt_url }} {{ ansible_distribution_release }} main"
-#     state: present
-#     update_cache: yes
 
 - name: Ensure latest python2.7 is installed
   tags: ['system', 'packages', 'apt', 'docker', 'python']
@@ -17,44 +6,6 @@
     pkg: python2.7
     state: latest
     install_recommends: no
-
-- name: Set docker apt repository url
-  tags: ['system', 'packages', 'apt', 'docker']
-  set_fact:
-    docker_apt_url: "https://download.docker.com/linux/{{ lsb_release_name }}"
-
-- name: Set docker repository release ditribution channel
-  tags: ['system', 'packages', 'apt', 'docker']
-  set_fact:
-    docker_apt_dist: "stable"
-
-- name: Set docker repository source
-  tags: ['system', 'packages', 'apt', 'docker']
-  set_fact:
-    docker_apt_source: "deb {{ docker_apt_url }} {{ ansible_distribution_release }} {{ docker_apt_dist }}"
-
-- name: Add Docker repository key
-  tags: ['system', 'packages', 'apt', 'docker']
-  apt_key:
-    id: "58118E89F3A912897C070ADBF76221572C52609D"
-    keyserver: "hkp://p80.pool.sks-keyservers.net:80"
-    state: present
-
-- name: Add docker-ce repository signing key
-  tags: ['system', 'packages', 'apt', 'docker']
-  apt_key:
-    id: 0EBFCD88
-    url: "https://download.docker.com/linux/{{ lsb_release_name }}/gpg"
-    state: present
-
-- name: "Add Docker repository for {{ lsb_release_name }}"
-  tags: ['system', 'packages', 'apt', 'docker']
-  apt_repository:
-    repo: "{{ item }}"
-    update_cache: yes
-    state: present
-  with_items:
-    - "{{ docker_apt_source }}"
 
 - name: Remove Legacy Docker Packages
   tags: ['system', 'packages', 'apt', 'docker']
@@ -64,8 +15,8 @@
   with_items:
     - docker
     - docker-engine
-    - docker.io
     - docker-hypriot
+    - docker-ce
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install docker dependencies
@@ -94,7 +45,7 @@
     install_recommends: yes
     update_cache: yes
   with_items:
-    - docker-ce
+    - docker.io
     - docker-compose
   check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"
