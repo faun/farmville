@@ -8,6 +8,7 @@
   roles:
     - common
     - docker
+    - kubernetes
     - smb_mount
     - autofs
     - tersmitten.locales

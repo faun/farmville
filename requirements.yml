@@ -1,0 +1,6 @@
+- dev-sec.nginx-hardening, 1.0.2
+- dev-sec.os-hardening, 4.2.0
+- dev-sec.ssh-hardening, 4.3.1
+- jdauphant.nginx, v2.11
+- tersmitten.locales, v1.0.14
+- joshualund.golang

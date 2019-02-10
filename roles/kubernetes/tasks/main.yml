@@ -1,0 +1,57 @@
+---
+- name: Add kubernetes repository signing key
+  tags: ['system', 'packages', 'apt', 'kubernetes']
+  apt_key:
+    id: A7317B0F
+    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+    state: present
+
+- name: Set kubernetes apt repository url
+  tags: ['system', 'packages', 'apt', 'kubernetes']
+  set_fact:
+    kubernetes_apt_url: "http://apt.kubernetes.io/"
+
+- name: Set kubernetes repository release channel
+  tags: ['system', 'packages', 'apt', 'kubernetes']
+  set_fact:
+    kubernetes_apt_release_channel: "kubernetes-xenial main"
+
+- name: Set docker repository source
+  tags: ['system', 'packages', 'apt', 'kubernetes']
+  set_fact:
+    kubernetes_apt_source: "deb {{ kubernetes_apt_url }} {{ kubernetes_apt_release_channel }}"
+
+- name: "Add kubernetes repository"
+  tags: ['system', 'packages', 'apt', 'kubernetes']
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+    - "{{ kubernetes_apt_source }}"
+
+- name: Install Kubernetes
+  tags: ['system', 'packages', 'apt', 'kubernetes']
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    install_recommends: yes
+    update_cache: yes
+  with_items:
+    - kubeadm
+
+- name: Specify cri-tools release version
+  tags: ['system', 'packages', 'kubernetes']
+  set_fact:
+    crictl_release_version: "v1.0.0-alpha.0"
+
+- name: Copy crictl binary
+  tags: ['system', 'packages', 'kubernetes']
+  get_url:
+    url: "{{ item }}"
+    dest: /usr/local/bin/crictl
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "https://storage.googleapis.com/kubernetes-release/crictl/crictl-{{ crictl_release_version }}-linux-amd64"
