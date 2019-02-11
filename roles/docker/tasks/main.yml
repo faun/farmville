@@ -50,52 +50,45 @@
 - name: "Add Docker repository for {{ lsb_release_name }}"
   tags: ['system', 'packages', 'apt', 'docker']
   apt_repository:
-    repo: "{{ item }}"
+    repo: "{{ docker_apt_source }}"
     update_cache: yes
     state: present
-  with_items:
-    - "{{ docker_apt_source }}"
 
 - name: Remove Legacy Docker Packages
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
-    pkg: "{{ item }}"
+    pkg:
+      - docker
+      - docker-engine
+      - docker.io
+      - docker-hypriot
     state: absent
-  with_items:
-    - docker
-    - docker-engine
-    - docker.io
-    - docker-hypriot
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install docker dependencies
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
-    pkg: "{{ item }}"
+    pkg:
+      - apparmor
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - docker-compose
+      - gnupg2
+      - software-properties-common
     state: present
     install_recommends: yes
     update_cache: yes
-  with_items:
-    - apparmor
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - docker-compose
-    - gnupg2
-    - software-properties-common
   check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install Docker
   tags: ['system', 'packages', 'apt', 'docker']
   apt:
-    pkg: "{{ item }}"
+    pkg: ['docker-ce', 'docker-compose']
     state: present
     install_recommends: yes
     update_cache: yes
-  with_items:
-    - docker-ce
-    - docker-compose
   check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"
 
