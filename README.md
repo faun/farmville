@@ -6,7 +6,7 @@ Initialize the repo:
 make install
 ```
 
-Run the playbook
+Run the playbook:
 
 ```
 make provision
