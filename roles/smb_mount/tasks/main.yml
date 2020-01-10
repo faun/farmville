@@ -77,6 +77,6 @@
     path: "/{{ mount_destination }}/{{ item }}"
     src: "//{{ smb_hostname }}/{{ item }}"
     fstype: 'cifs'
-    opts: "credential=/etc/samba/user"
+    opts: "credentials=/etc/samba/user"
     state: mounted
   with_items: "{{ mount_points }}"
